@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Booking Page</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="booking.css">
+
+</head>
+<body>
+    <!--navbar-->  
+    <nav class="navbar navbar-dark bg-dark px-4 flex-column align-items-start">  
+    <a class="navbar-brand fw-bold bold text-white mb-2" href="home.html"><b>BUDDYNEST</b></a>  
+    <div class="navbar-nav d-flex flex-row gap-3">
+
+    <a href="home.html" class="nav-item nav-link">Home</a>  
+    <a href="gallery.html" class="nav-item nav-link">Gallery</a>  
+    <a href="booking.html" class="nav-item nav-link active">Booking</a>  
+    <a href="shooping.html" class="nav-item nav-link">Shooping</a>  
+    <a href="healthcare.html" class="nav-item nav-link">Health Care</a>  
+    <a href="contact.html" class="nav-item nav-link">Contact</a>  
+</div>
+
+</nav>  
+    <div class="booking-box">
+        <h2 class="mb-4 text-center"><b>Pet Adoption Form</b></h2>
+        <img id="petImage" class="pet-img mb-3">
+        <h4 id="petName"></h4>
+        <p id="petBreed"></p>
+
+        <form id="bookingForm">
+            <input type="text" id="userName" class="form-control mb-3" placeholder="Your Name" required>
+            <input type="text" id="userEmail" class="form-control mb-3" placeholder="Email" required>
+            <input type="text" id="userAddress" class="form-control mb-3" placeholder="Address" required>
+            <input type="text" id="userContact" class="form-control mb-3" placeholder="Contact Number" required>
+
+            <button type="submit" class="btn btn-success w-100">Adopt</button>
+        </form>
+    </div>
+
+    <!--history-->
+    <div class="history-box">
+        <h3><b>Adoption History</b></h3>
+        <input
+        type="text"
+        id="searchHistory"
+        class="form-control mb-3"
+        placeholder="Search by pet or user name..."
+        onkeyup="loadHistory()">
+        <div id="historyList"></div>
+    </div>
+
+    <script>
+        let editIndex = null;
+        //select pet
+        let pet = JSON.parse(localStorage.getItem("selectedPet"));
+
+        if(pet){
+            document.getElementById("petImage").src = pet.image;
+            document.getElementById("petName").innerText = pet.name;
+            document.getElementById("petBreed").innerText = pet.breed;
+
+        }
+        else{
+            document.getElementById("petImage").style.display="none";
+            document.getElementById("petName").innerText = "No Pet Selected";
+            document.getElementById("petBreed").innerText = "";
+
+        }
+        
+
+        //adoption
+        document.getElementById("bookingForm").addEventListener("submit", function(e){
+            e.preventDefault();
+
+            let currectpet = JSON.parse(localStorage.getItem("selectedPet"));
+
+            if(!currectpet){
+                alert("No Pet Selected");
+                return; 
+            }
+
+            let adopter = {
+                petName: currectpet.name,
+                petImage: currectpet.image,
+                userName: document.getElementById("userName").value,
+                email: document.getElementById("userEmail").value,
+                address: document.getElementById("userAddress").value,
+                contact: document.getElementById("userContact").value,
+                date: new Date().toLocaleString()
+                
+            };
+
+            //save history
+            let history = JSON.parse(localStorage.getItem("history")) || [];
+            let isEdit = editIndex !== null;
+
+            if(isEdit){
+                history[editIndex] = adopter;
+
+                localStorage.setItem("history",JSON.stringify(history));
+                editIndex = null;
+
+                document.querySelector("#bookingForm button").innerText = "Adopt";
+                alert("Booking Updated!");
+            }
+            else{
+                history.push(adopter);
+                localStorage.setItem("history",JSON.stringify(history));
+                alert("Pet Adoption Confirmed!")
+            }
+            
+
+            //booked pet
+            localStorage.setItem("booked_" +currectpet.name,"true");
+            alert(isEdit ? "Booking Update!" : "Pet Adoption Confirmed!");
+
+            loadHistory();
+
+            clearForm();
+            
+        });
+
+        //history load
+        function loadHistory(){
+            let history = JSON.parse(localStorage.getItem("history")) || [];
+
+            let Search = document.getElementById("searchHistory").value.toLowerCase();
+            history = history.filter(item =>
+                item.petName.toLowerCase().includes(Search) ||
+                item.userName.toLowerCase().includes(Search)
+            );
+
+            let box = document.getElementById("historyList");
+
+            box.innerHTML = "";
+            if(history.length === 0){
+                box.innerHTML =  `
+                    <div class="text-center text-muted p-3">
+                         <h5>No bookings yet 🐾</h5>
+                    </div>
+                `;
+                return; 
+            }
+
+            history.forEach((item, index) => {
+                box.innerHTML += `
+                    <div class="border p-2 mb-2 rounded">
+                        <h5>${item.petName}</h5>
+                        <p><b>Name:</b> ${item.userName}</p>
+                        <p><b>Email:</b> ${item.email}</p>
+                        <p><b>Address:</b> ${item.address}</p>
+                        <p><b>Contact:</b> ${item.contact}</p>
+                        <p><small><b>Booked At:</b> ${item.date}</small></p>
+
+                        <button class="btn btn-primary btn-sm mt-2" onclick="editBooking(${index})">Edit</button>
+
+                        <button class="btn btn-danger btn-sm mt-2" onclick="if(confirm('Are You Sure You Want To Cancel this booking?')) cancelBooking(${index}, '${item.petName}')">
+
+                            Cancel Booking
+                        </button>
+                    </div>
+                    `;
+                });
+            }
+
+            //cancel booking 
+            function cancelBooking(index,petName){
+                let history = JSON.parse(localStorage.getItem("history")) || [];
+
+                history.splice(index, 1);
+                localStorage.setItem("history", JSON.stringify(history));
+                localStorage.removeItem("booked_" +petName);
+
+                editIndex = null;
+                document.querySelector("#bookingForm button").innerText = "Adopt";
+                
+                clearForm();
+                    
+                loadHistory();
+                
+            }
+
+            function editBooking(index){
+
+                let history = JSON.parse(localStorage.getItem("history")) || [];
+                let item = history[index];
+
+                editIndex = index;
+
+                // form information show
+                document.getElementById("userName").value = item.userName;
+                document.getElementById("userEmail").value = item.email;
+                document.getElementById("userAddress").value = item.address;
+                document.getElementById("userContact").value = item.contact;
+
+                // pet information show
+                document.getElementById("petName").innerText = item.petName;
+                document.getElementById("petImage").src = item.petImage;
+                document.getElementById("petImage").style.display = "block";
+
+                // important
+                localStorage.setItem("selectedPet", JSON.stringify({
+                name: item.petName,
+                image: item.petImage
+            }));
+
+            document.querySelector("#bookingForm button").innerText = "Update Booking";
+        }
+
+            function clearForm(){
+                document.getElementById("bookingForm").reset();
+                document.getElementById("petImage").src = "";
+                document.getElementById("petName").innerText = "";
+                document.getElementById("petBreed").innerText = "";
+            }
+
+            document.addEventListener("DOMContentLoaded",loadHistory);   
+        
+        </script>
+</body>
+</html>

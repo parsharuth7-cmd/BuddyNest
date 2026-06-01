@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Doctor Chat</title>
+<link rel="stylesheet" href="chat.css">
+</head>
+
+<body>
+
+<div class="chat-container">
+    <h2 class="title"><b>🩺Online Doctor Chat</b></h2>
+    <div class="chat-box" id="chatBox"></div>
+
+    <div class="input-area">
+        <input type="text" id="msg" placeholder="Type message..">
+        <button onclick="sendMsg()">Send</button>
+
+        <button class="clear-btn" onclick="clearChat()">Clear</button>
+    </div>
+</div>
+
+
+<script>
+
+let chats = JSON.parse(localStorage.getItem("chats")) || [];
+let replyIndex = 0;
+
+// load chat
+function loadChat(){
+    let box = document.getElementById("chatBox");
+    box.innerHTML = "";
+
+    chats.forEach(c => {
+        box.innerHTML += `<div class="${c.sender}">${c.text}</div>`;
+    });
+
+    box.scrollTop = box.scrollHeight;
+}
+
+// send message
+function sendMsg(){
+
+    let msg = document.getElementById("msg").value;
+
+    if(!msg) return;
+
+    chats.push({ 
+        sender: "user", 
+        text: msg 
+    });
+    localStorage.setItem("chats", JSON.stringify(chats));
+
+    document.getElementById("msg").value = "";
+    loadChat();
+    
+    //doctor reply
+    setTimeout(()=>{
+
+    let replies = [
+        "Doctor : Can you describe your symptoms in details?",
+        "Doctor : Since when your pet felling this problem?",
+        "Doctor : Please avoid self medicine.",
+        "Doctor : I will suggest you some medicine for now.",
+
+    ];
+
+    let reply = replies[replyIndex];
+
+    replyIndex++;
+    if(replyIndex >= replies.length){
+        replyIndex = 0;
+    }
+
+    chats.push({
+        sender : "doctor",
+        text: reply
+    });
+
+    localStorage.setItem("chats", JSON.stringify(chats));
+
+    loadChat();
+},1000);
+}
+
+function clearChat(){
+    localStorage.removeItem("chats");
+    chats =[];
+    loadChat();
+}
+
+loadChat();
+
+</script>
+
+
+</body>
+</html>

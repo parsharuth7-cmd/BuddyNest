@@ -1,0 +1,80 @@
+body{
+    font-family: Arial;
+    background: #f8dbff;
+    margin: 0;
+    padding: 0;
+}
+
+/* NAVBAR */
+.navbar{
+    background: #111;
+    padding: 10px 20px;
+}
+
+.navbar a{
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+/* TITLE */
+.title{
+    text-align: center;
+    margin: 30px 0;
+    font-size: 35px;
+    font-weight: bold;
+    width: 100%;
+    display: block;
+}
+
+
+.container{
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+/* CARD STYLE */
+.card{
+    width: 320px;
+    height: 320px;
+    background: white;
+
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+/* hover effect */
+.card:hover{
+    transform: translateY(-6px);
+}
+
+/* text spacing */
+.card p{
+    margin: 5px 0;
+    color: #555;
+}
+
+/* colors */
+.doctor{
+    border-top: 5px solid #217935;
+}
+
+.medicine{
+    border-top: 5px solid #7cb7f5;
+}
+

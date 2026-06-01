@@ -1,0 +1,52 @@
+body{
+    font-family: Arial;
+    margin: 0;
+    background: #fff0f0;
+}
+
+/* navbar */
+.navbar{
+    background: #111;
+    padding: 10px 20px;
+}
+
+.navbar a{
+    margin-right: 10px;
+    text-decoration: none;
+}
+
+.navbar a.active{
+    color: yellow;
+    font-weight: bold;
+}
+
+/* title */
+.title{
+    text-align: center;
+    margin: 20px;
+    color: red;
+}
+
+/* card */
+.container{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.card{
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 300px;
+
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+/* links */
+a{
+    text-decoration: none;
+    color: rgb(27, 55, 196);
+    font-weight: bold;
+}

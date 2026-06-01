@@ -1,0 +1,131 @@
+body{
+    margin: 0;
+    font-family: Arial;
+    background: #f6e2fa;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100vh;
+}
+
+/* CHAT CONTAINER */
+.chat-container{
+    width: 1000px;
+    height: 600px;
+
+    background: rgb(249, 150, 239);
+
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.chat-header{
+    padding: 15px;
+
+    background: #a5cdf4;
+    color: black;
+
+    text-align: center;
+
+    font-weight: bold;
+}
+
+/* CHAT BOX */
+.chat-box{
+    flex: 1;
+
+    padding: 15px;
+
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    background: #f5f7fb;
+    
+}
+
+/* INPUT AREA */
+.input-area{
+    display: flex;
+
+    padding: 10px;
+
+    background: rgb(252, 121, 239);
+
+    border-top: 1px solid #ddd;
+}
+
+/* INPUT */
+input{
+    flex: 1;
+
+    padding: 12px;
+
+    border: none;
+
+    background: #f0f2f5;
+
+    border-radius: 25px;
+
+    outline: none;
+}
+
+/* BUTTON */
+button{
+    margin-left: 10px;
+
+    padding: 12px 18px;
+
+    border: none;
+
+    background: #b411c6fd;
+    color: black;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+    border-radius: 25px;
+
+    cursor: pointer;
+}
+
+/* USER MESSAGE */
+.user{
+    align-self: flex-end;
+
+    background: #a1cef9;
+    color: black;
+
+    padding: 10px 15px;
+
+    border-radius: 20px 20px 5px 20px;
+
+    max-width: 70%;
+}
+
+/* DOCTOR MESSAGE */
+.doctor{
+    align-self: flex-start;
+
+    background: rgb(26, 178, 220);
+    color: black;
+
+    padding: 10px 15px;
+
+    border-radius: 20px 20px 20px 5px;
+
+    max-width: 70%;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
